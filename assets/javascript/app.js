@@ -23,7 +23,7 @@ var triviaQuestions = [{
   validAnswer: 3,
 }];
 
-var timeToAnswer = 30;
+var answerTime = 30;
 
 var pickedQuestions = [];
 
@@ -39,24 +39,30 @@ var pickQuestion = function(questionList) {
   }
 }
 
+var timer = function(time, interval = 1000) {
+  var intervalID = setInterval(function() {
+    if(time === 0) {
+      $('#countdown').text('done!');
+      clearInterval(intervalID);
+    } else {
+      time--;
+      console.log(time)
+      $('#countdown').text(time);
+    }
+  } , 1000);
+}
+
+// var nextQuestion = function () {}
+
 $(document).ready(function() {
   var query = pickQuestion(triviaQuestions);
   console.log(query);
   $('#question-pane').text(query.question);
   $.each(query.choices , function() {
-    var choice = $('<p></p>');
+    var choice = $('<li></li>');
     console.log(this);
     choice.text(this);
     $('#question-pane').append(choice);
   });
-  var x = setInterval(function() {
-    if(timeToAnswer === 0) {
-      $('#countdown').text('done!');
-      clearInterval(x);
-    } else {
-      timeToAnswer--;
-      console.log(timeToAnswer)
-      $('#countdown').text(timeToAnswer);
-    }
-  } , 1000);
+  timer(answerTime);
 })
