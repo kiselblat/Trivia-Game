@@ -24,6 +24,9 @@ var triviaQuestions = [{
 }];
 
 var answerTime = 30;
+var elapsedTime = 0;
+var query = 0;
+var queryAnswer = 0;
 
 var pickedQuestions = [];
 
@@ -46,23 +49,37 @@ var timer = function(time, interval = 1000) {
       clearInterval(intervalID);
     } else {
       time--;
-      console.log(time)
+      elapsedTime++;
+      console.log(time , elapsedTime)
       $('#countdown').text(time);
     }
-  } , 1000);
+  } , interval);
 }
 
-// var nextQuestion = function () {}
-
-$(document).ready(function() {
-  var query = pickQuestion(triviaQuestions);
+var nextQuestion = function () {
+  query = pickQuestion(triviaQuestions);
   console.log(query);
+  queryAnswer = query.validAnswer;
   $('#question-pane').text(query.question);
-  $.each(query.choices , function() {
+  $.each(query.choices , function(choiceIndex , choiceContent) {
     var choice = $('<li></li>');
-    console.log(this);
-    choice.text(this);
+    console.log(choiceContent, choiceIndex);
+    choice.text(choiceContent);
+    choice.attr("answerNumber" , choiceIndex);
+    // choice.on("click" , answerQuestion());
     $('#question-pane').append(choice);
   });
+}
+
+var answerQuestion = function() {  
+  if (triviaQuestions.length === pickedQuestions.lenth) {
+    //quiz over
+    console.log("quiz over");
+  }
+  
+}
+
+$(document).ready(function() {
+  nextQuestion();
   timer(answerTime);
 })
