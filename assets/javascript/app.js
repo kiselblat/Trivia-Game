@@ -24,72 +24,91 @@ var triviaQuestions = [{
 }];
 
 var answerTime = 30;
-var elapsedTime = 0;
+var quizLength = triviaQuestions.length;
 
 var pickedQuestions = [];
 var queryAnswer = 0;
 var query = 0;
+var correct = 0;
+var incorrect = 0;
 
 var pickQuestion = function() {
-  if (pickedQuestions.length >= triviaQuestions.length) {
+  if (pickedQuestions.length >= quizLength) {
     //game over
     gameOver();
+    return false;
   } else {
     do {
       var pick = Math.floor(Math.random() * triviaQuestions.length);
-      console.log(pick);
     }
-    while (pickedQuestions.includes(pick)) {
-    }
+    while (pickedQuestions.includes(pick));
+    console.log(pick);
     pickedQuestions.push(pick);
     return triviaQuestions[pick];
   }
+};
 
+// my solution here didn't work and I'm not sure why
+// 
+//  var pickQuestion = function() {
+//    if (pickedQuestions.length === triviaQuestions.length) {
+//      // game over
+//      gameOver();
+//    } else if (pickedQuestions.includes(pick)) {
+//      console.log(pick, " was already picked")
+//      pickQuestion();
+//    } else {
+//      console.log(pick);
+//      pickedQuestions.push(pick);
+//      console.log(pickedQuestions);
+//      console.log(triviaQuestions[pick]);
+//      return triviaQuestions[pick];
+//    };
 
-  // if (pickedQuestions.length === triviaQuestions.length) {
-  //   // game over
-  //   gameOver();
-  // } else if (pickedQuestions.includes(pick)) {
-  //   console.log(pick, " was already picked")
-  //   pickQuestion();
-  // } else {
-  //   console.log(pick);
-  //   pickedQuestions.push(pick);
-  //   console.log(pickedQuestions);
-  //   console.log(triviaQuestions[pick]);
-  //   return triviaQuestions[pick];
-  // }
-}
-
-var timer = function(time, interval = 1000) {
-  var intervalID = setInterval(function() {
+var intervalID;
+var timer = function(time, interval = 1) {
+  intervalID = setInterval(function() {
     if(time === 0) {
       $('#countdown').text('done!');
       clearInterval(intervalID);
+      return outtaTime();
     } else {
       time--;
-      elapsedTime++;
       // console.log(time , elapsedTime)
       $('#countdown').text(time);
     }
-  } , interval);
+  } , interval * 1000);
+}
+
+var outtaTime = function() {
+  console.log("time elapsed");
+  nextQuestion();
+}
+
+var stopTheClock = function() {
+  clearInterval(intervalID);
+  clearTimeout();
 }
 
 var nextQuestion = function () {
-  query = pickQuestion();
-  console.log("Query: " , query);
-  queryAnswer = query.validAnswer;
-  console.log("Answer: " , queryAnswer);
-  $('#question-pane').text(query.question);
   
+  query = pickQuestion();
+  if (query === false) {
+    return;
+  }
+  queryAnswer = query.validAnswer;
+  $('#question-pane').text(query.question);
   $.each(query.choices , function(choiceIndex , choiceContent) {
-    var choice = $('<li></li>');
     console.log(choiceContent, choiceIndex);
+    var choice = $('<li></li>');
     choice.text(choiceContent);
     choice.attr('answerNumber' , choiceIndex);
     choice.click(answerQuestion);
     $('#question-pane').append(choice);
   });
+  console.log("Question: " , query.question);
+  console.log("Answer: " , queryAnswer);
+  timer(answerTime);
 };
 
 var answerQuestion = function() {
@@ -98,10 +117,14 @@ var answerQuestion = function() {
   if (answerIndex === queryAnswer) {
     //correct
     console.log("right answer");
+    correct++;
+    stopTheClock();
     nextQuestion();
   } else {
     //incorrect
     console.log("wrong answer");
+    incorrect++;
+    stopTheClock();
     nextQuestion();
   }
 };
@@ -113,5 +136,4 @@ var gameOver = function() {
 
 $(document).ready(function() {
   $('#start-button').click(nextQuestion());
-  timer(answerTime);
 })
