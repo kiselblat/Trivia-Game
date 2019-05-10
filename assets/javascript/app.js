@@ -6,7 +6,7 @@ var triviaQuestions = [{
   },
   {
   question: "Which is the second answer?",
-  choices: ["first" , "second", "third", "fourth"],
+  choices: ["first" , "second" , "third" , "fourth"],
   //images: ["../images/batplaceholder.jpg"],
   validAnswer: 1,
   },
@@ -25,21 +25,40 @@ var triviaQuestions = [{
 
 var answerTime = 30;
 var elapsedTime = 0;
-var query = 0;
-var queryAnswer = 0;
 
 var pickedQuestions = [];
+var queryAnswer = 0;
+var query = 0;
 
-var pickQuestion = function(questionList) {
-  var pick = Math.floor(Math.random() * questionList.length);
-  if (!pickedQuestions.includes(pick)) {
-    pickedQuestions.push(pick);
-    console.log(pick , pickedQuestions)
-    return questionList[pick];
+var pickQuestion = function() {
+  if (pickedQuestions.length >= triviaQuestions.length) {
+    //game over
+    gameOver();
   } else {
-    console.log(pick, " was already picked")
-    pickQuestion(questionList);
+    do {
+      var pick = Math.floor(Math.random() * triviaQuestions.length);
+      console.log(pick);
+    }
+    while (pickedQuestions.includes(pick)) {
+    }
+    pickedQuestions.push(pick);
+    return triviaQuestions[pick];
   }
+
+
+  // if (pickedQuestions.length === triviaQuestions.length) {
+  //   // game over
+  //   gameOver();
+  // } else if (pickedQuestions.includes(pick)) {
+  //   console.log(pick, " was already picked")
+  //   pickQuestion();
+  // } else {
+  //   console.log(pick);
+  //   pickedQuestions.push(pick);
+  //   console.log(pickedQuestions);
+  //   console.log(triviaQuestions[pick]);
+  //   return triviaQuestions[pick];
+  // }
 }
 
 var timer = function(time, interval = 1000) {
@@ -50,36 +69,49 @@ var timer = function(time, interval = 1000) {
     } else {
       time--;
       elapsedTime++;
-      console.log(time , elapsedTime)
+      // console.log(time , elapsedTime)
       $('#countdown').text(time);
     }
   } , interval);
 }
 
 var nextQuestion = function () {
-  query = pickQuestion(triviaQuestions);
-  console.log(query);
+  query = pickQuestion();
+  console.log("Query: " , query);
   queryAnswer = query.validAnswer;
+  console.log("Answer: " , queryAnswer);
   $('#question-pane').text(query.question);
+  
   $.each(query.choices , function(choiceIndex , choiceContent) {
     var choice = $('<li></li>');
     console.log(choiceContent, choiceIndex);
     choice.text(choiceContent);
-    choice.attr("answerNumber" , choiceIndex);
-    // choice.on("click" , answerQuestion());
+    choice.attr('answerNumber' , choiceIndex);
+    choice.click(answerQuestion);
     $('#question-pane').append(choice);
   });
-}
+};
 
-var answerQuestion = function() {  
-  if (triviaQuestions.length === pickedQuestions.lenth) {
-    //quiz over
-    console.log("quiz over");
+var answerQuestion = function() {
+  var answerIndex = parseInt($(this).attr('answerNumber'));
+  console.log("clicked answer: " , answerIndex, queryAnswer);
+  if (answerIndex === queryAnswer) {
+    //correct
+    console.log("right answer");
+    nextQuestion();
+  } else {
+    //incorrect
+    console.log("wrong answer");
+    nextQuestion();
   }
-  
-}
+};
+
+var gameOver = function() {
+  console.log("game over");
+  $('#status-pane').text("game over");
+};
 
 $(document).ready(function() {
-  nextQuestion();
+  $('#start-button').click(nextQuestion());
   timer(answerTime);
 })
