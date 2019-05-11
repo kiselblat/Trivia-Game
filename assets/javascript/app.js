@@ -31,6 +31,7 @@ var queryAnswer = 0;
 var query = 0;
 var correct = 0;
 var incorrect = 0;
+var quizzing = true;
 
 var pickQuestion = function() {
   if (pickedQuestions.length >= quizLength) {
@@ -94,6 +95,8 @@ var nextQuestion = function () {
   
   query = pickQuestion();
   if (query === false) {
+    quizzing = false;
+    console.log(quizzing)
     return;
   }
   queryAnswer = query.validAnswer;
@@ -131,9 +134,24 @@ var answerQuestion = function() {
 
 var gameOver = function() {
   console.log("game over");
-  $('#status-pane').text("game over");
+  $('#status-pane').text("Game Over - Press Go! to try again");
 };
 
+var newgame = function() {
+  console.log("new game");
+  quizzing = true;
+  pickedQuestions = [];
+  console.log(quizzing , pickedQuestions);
+  $('#status-pane').text("Press Go! to begin quiz")
+}
+
 $(document).ready(function() {
-  $('#start-button').click(nextQuestion());
+  $('#start-button').click(function () {
+    if (quizzing === false) {
+      console.log("click new game");
+      newgame();  
+    }
+    console.log("click next question")
+    nextQuestion();
+  });
 })
