@@ -23,7 +23,7 @@ var triviaQuestions = [{
   validAnswer: 3,
 }];
 
-var answerTime = 30;
+var answerTime = 11;
 var quizLength = triviaQuestions.length;
 
 var pickedQuestions = [];
@@ -49,30 +49,13 @@ var pickQuestion = function() {
   }
 };
 
-// my solution here didn't work and I'm not sure why
-// 
-//  var pickQuestion = function() {
-//    if (pickedQuestions.length === triviaQuestions.length) {
-//      // game over
-//      gameOver();
-//    } else if (pickedQuestions.includes(pick)) {
-//      console.log(pick, " was already picked")
-//      pickQuestion();
-//    } else {
-//      console.log(pick);
-//      pickedQuestions.push(pick);
-//      console.log(pickedQuestions);
-//      console.log(triviaQuestions[pick]);
-//      return triviaQuestions[pick];
-//    };
-
 var intervalID;
 var timer = function(time, interval = 1) {
   intervalID = setInterval(function() {
     if(time === 0) {
-      $('#countdown').text('done!');
+      $('#countdown').text('');
       clearInterval(intervalID);
-      return outtaTime();
+      outtaTime();
     } else {
       time--;
       // console.log(time , elapsedTime)
@@ -83,7 +66,8 @@ var timer = function(time, interval = 1) {
 
 var outtaTime = function() {
   console.log("time elapsed");
-  nextQuestion();
+  revealAnswers();
+  setTimeout(nextQuestion , 1250);
 }
 
 var stopTheClock = function() {
@@ -92,7 +76,7 @@ var stopTheClock = function() {
 }
 
 var nextQuestion = function () {
-  
+  $('#status-pane').text("Time Remaining:")
   query = pickQuestion();
   if (query === false) {
     quizzing = false;
@@ -103,7 +87,7 @@ var nextQuestion = function () {
   $('#question-pane').text(query.question);
   $.each(query.choices , function(choiceIndex , choiceContent) {
     console.log(choiceContent, choiceIndex);
-    var choice = $('<li></li>');
+    var choice = $('<li type="A"></li>');
     choice.text(choiceContent);
     choice.attr('answerNumber' , choiceIndex);
     choice.click(answerQuestion);
@@ -120,32 +104,43 @@ var answerQuestion = function() {
   if (answerIndex === queryAnswer) {
     //correct
     console.log("right answer");
-    correct++;
+    $('#status-pane').text("Correct!");
+    $('#countdown').text("");
     stopTheClock();
-    nextQuestion();
+    correct++;
+    setTimeout(nextQuestion , 1250);
   } else {
     //incorrect
     console.log("wrong answer");
-    incorrect++;
+    $('#status-pane').text("Incorrect!")
     stopTheClock();
-    nextQuestion();
+    revealAnswers();
+    incorrect++;
+    setTimeout(nextQuestion , 1250);
   }
 };
 
+var revealAnswers = function() {
+  $('#countdown').text(query.choices[queryAnswer]);
+}
+
 var gameOver = function() {
   console.log("game over");
-  $('#status-pane').text("Game Over - Press Go! to try again");
+  $('#status-pane').text("Complete! - Press Go! to try again");
+  $('#countdown').text("You scored " + correct + " out of " + quizLength);
 };
 
 var newgame = function() {
   console.log("new game");
   quizzing = true;
+  correct = 0;
   pickedQuestions = [];
   console.log(quizzing , pickedQuestions);
   $('#status-pane').text("Press Go! to begin quiz")
 }
 
 $(document).ready(function() {
+  newgame();
   $('#start-button').click(function () {
     if (quizzing === false) {
       console.log("click new game");

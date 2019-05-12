@@ -1,0 +1,29 @@
+var TriviaQuestions = [{
+	question: "This supercomputer was built by hyper-intelligent beings who exist in our dimension as ordinary white mice."
+	choices: ["Deep Thought" , "Profound Notion" , "The Big Brain" ,  "This machine was not named"]
+	validAnswer: 0
+	},
+---
+
+This military system from the movie WarGames was inadvertantly accessed by 80's youth and hacker who was trying to impress a girl.
+
+0 Colossus
+1 The Central Computer
+2 WOPR
+3 Mark V
+
+answer: 2
+
+---
+
+This famous computer on a Space Odyssey can't do that. But he's sorry about it.
+
+0 SAL 9000
+1 T.E.N.C.H. 889B
+2 HAL 9000
+3 MU-TH-UR 6000
+
+answer: 2
+
+---
+
