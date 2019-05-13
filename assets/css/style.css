@@ -2,6 +2,10 @@ header {
   text-align: center;
 }
 
+h2 {
+  font-size: 1.5em;
+}
+
 #instructions , #question-pane , #choices-pane {
   padding: 5px;
 }
@@ -10,8 +14,17 @@ header {
   font-weight: bold;
 }
 
+#choices-pane {
+  height: 250px;
+}
+
 img {
-  height: 200px;
+  height: 225px;
+}
+
+#start-button {
+  padding: 5px;
+  width: 100%;
 }
 
 li {
