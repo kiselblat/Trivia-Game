@@ -1,12 +1,17 @@
 header {
   text-align: center;
+  padding: 5px;
+  font-family: 'Press Start 2P', cursive;
 }
 
 h2 {
-  font-size: 1.5em;
+  font-size: 1em;
+  font-family: 'Press Start 2P', cursive;
 }
 
 #instructions , #question-pane , #choices-pane {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 3 em;
   padding: 5px;
 }
 
@@ -17,6 +22,8 @@ h2 {
 #choices-pane {
   height: 250px;
 }
+
+
 
 img {
   height: 225px;
