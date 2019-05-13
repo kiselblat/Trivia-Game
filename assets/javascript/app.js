@@ -1,37 +1,57 @@
 var triviaQuestions = [{
-  question: "Which is the third answer?",
-  choices: ["first" , "second" , "third" , "fourth"],
-  //images:  ["../images/batplaceholder.jpg"],
-  validAnswer: 2,
-  },
-  {
-  question: "Which is the second answer?",
-  choices: ["first" , "second" , "third" , "fourth"],
-  //images: ["../images/batplaceholder.jpg"],
-  validAnswer: 1,
-  },
-  {
-  question: "Which is the first answer?",
-  choices: ["first" , "second" , "third" , "fourth"],
-  //images: ["../images/batplaceholder.jpg"],
+  question: "This supercomputer was built by hyper-intelligent beings who exist in our dimension as ordinary white mice.",
+  choices: ["Deep Thought" , "Profound Notion" , "The Big Brain" ,  "This machine was not named"],
+  imageLink: "assets/images/deep-thought.png",
   validAnswer: 0,
-  },
-  {
-  question: "Which is the fourth answer?",
-  choices: ["first" , "second" , "third" , "fourth"],
-  //images: ["../images/batplaceholder.jpg"],
+},
+{
+  question: "This military system, WOPR from the movie WarGames, went by what human name?",
+  choices: ["Jerry" , "Joshua" , "Frank" , "Hal"],
+  imageLink: "assets/images/WOPR.jpg",
+  validAnswer: 1,
+},
+{
+  question: "This famous computer on a Space Odyssey can't do that. But he's sorry about it.",
+  choices: ["SAL 9000" , "T.E.N.C.H. 889B" , "HAL 9000" , "MU-TH-UR 6000"],
+  imageLink: "assets/images/HAL.jpg",
+  validAnswer: 2,
+},
+{
+  question: "In the movie Alien, this computer finally reveals the true purpose behind the Nostromo's mission",
+  choices: ["UNCLE" , "Mother" , "Computo" , "Guardian"],
+  imageLink: "assets/images/mother.jpg",
+  validAnswer: 1,
+},
+{
+  question: "After this robot celebrity's first appearence in Forbidden Planet, he susequently guest-starred in several American television shows including The Twilight Zone, The Man from U.N.C.L.E. and Columbo.",
+  choices: ["Mr. Robot" , "Robot B-9" , "Robby the Robot" , "Mr. Roboto"],
+  imageLink: "assets/images/robby.jpg",
+  validAnswer: 2,
+},
+{
+  question: "The Maschinenmensch of Fritz Lang's Metropolis also shared this name with her human doppleganger.",
+  choices: ["Brenda" , "Eve" , "Viki" , "Maria"],
+  imageLink: "assets/images/maria.jpg",
   validAnswer: 3,
-}];
+},
+{
+  question: "This alien robot came to help save us from ourselves in the classic movie The Day the Earth Stood Still.",
+  choices: ["Klaatu" , "The Robot" , "Gort" , "Brainiac"],
+  imageLink: "assets/images/Gort.jpg",
+  validAnswer: 2,
+},];
 
-var answerTime = 11;
+var answerTime = 10;
+var restTime = 1.5;
 var quizLength = triviaQuestions.length;
 
 var pickedQuestions = [];
-var queryAnswer = 0;
 var query = 0;
+var queryAnswer = 0;
 var correct = 0;
 var incorrect = 0;
 var quizzing = true;
+var betweenQ = true;
 
 var pickQuestion = function() {
   if (pickedQuestions.length >= quizLength) {
@@ -51,6 +71,8 @@ var pickQuestion = function() {
 
 var intervalID;
 var timer = function(time, interval = 1) {
+  console.log("timer started");
+  time++;
   intervalID = setInterval(function() {
     if(time === 0) {
       $('#countdown').text('');
@@ -58,7 +80,7 @@ var timer = function(time, interval = 1) {
       outtaTime();
     } else {
       time--;
-      // console.log(time , elapsedTime)
+      // console.log(time);
       $('#countdown').text(time);
     }
   } , interval * 1000);
@@ -67,7 +89,8 @@ var timer = function(time, interval = 1) {
 var outtaTime = function() {
   console.log("time elapsed");
   revealAnswers();
-  setTimeout(nextQuestion , 1250);
+  betweenQ = true;
+  setTimeout(nextQuestion , restTime * 1000);
 }
 
 var stopTheClock = function() {
@@ -76,7 +99,11 @@ var stopTheClock = function() {
 }
 
 var nextQuestion = function () {
-  $('#status-pane').text("Time Remaining:")
+  betweenQ = false;
+  $('#status-pane').text("Time Remaining:");
+  $('#question-pane').empty();
+  $('#picture-pane').empty();
+  $('#choices-pane').empty();
   query = pickQuestion();
   if (query === false) {
     quizzing = false;
@@ -84,39 +111,50 @@ var nextQuestion = function () {
     return;
   }
   queryAnswer = query.validAnswer;
+  // Get question
   $('#question-pane').text(query.question);
+  // Get picture clue
+  var queryPicture = $('<img>');
+  queryPicture.attr('src' , query.imageLink);
+  $('#picture-pane').append(queryPicture);
+  // Get choices
   $.each(query.choices , function(choiceIndex , choiceContent) {
     console.log(choiceContent, choiceIndex);
     var choice = $('<li type="A"></li>');
     choice.text(choiceContent);
     choice.attr('answerNumber' , choiceIndex);
     choice.click(answerQuestion);
-    $('#question-pane').append(choice);
+    $('#choices-pane').append(choice);
   });
   console.log("Question: " , query.question);
   console.log("Answer: " , queryAnswer);
+  // Start the timer
   timer(answerTime);
 };
 
 var answerQuestion = function() {
   var answerIndex = parseInt($(this).attr('answerNumber'));
   console.log("clicked answer: " , answerIndex, queryAnswer);
-  if (answerIndex === queryAnswer) {
+  if (quizzing === false || betweenQ === true) {
+    return;
+  } else if (answerIndex === queryAnswer) {
     //correct
+    betweenQ = true;
     console.log("right answer");
     $('#status-pane').text("Correct!");
     $('#countdown').text("");
     stopTheClock();
     correct++;
-    setTimeout(nextQuestion , 1250);
+    setTimeout(nextQuestion , restTime * 1000);
   } else {
     //incorrect
+    betweenQ = true;
     console.log("wrong answer");
     $('#status-pane').text("Incorrect!")
     stopTheClock();
     revealAnswers();
     incorrect++;
-    setTimeout(nextQuestion , 1250);
+    setTimeout(nextQuestion , restTime * 1000);
   }
 };
 

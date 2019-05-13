@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Trivia Game</title>
+  <title>Know Your Computer!</title>
   
   <!-- reset -->
   <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
@@ -25,14 +25,23 @@
       <div class="row">
       <div class="col-md-2"></div>
       <div class="col-md">
-        <h1>Trivia Game</h1>
+        <h1>Know Your Computer!</h1>
       </div>
       <div class="col-md-2"></div>
       </div>
   </header>
 
   <main role="main" class="flex-shrink-0">
-      <div class="row">
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md">
+        <div id="instructions">
+          <p>Test you knowledge of famous robots and computers in movies and television against your new digital overlord. Once you push the go button you'll have ten seconds to answer each question. There will be a brief pause between questions to allow your puny human mind time to recover.</p>
+        </div>
+      </div>
+      <div class="col-md-2"></div>
+    </div>  
+    <div class="row">
       <div class="col-md-2"></div>
       <div class="col-md">
       <section>
@@ -44,6 +53,9 @@
         <div class="row">
           <div class="col-md">
             <ol type="A" id="choices-pane"></ol>
+          </div>
+          <div class="col-md">
+            <div id="picture-pane" class="text-center"></div>
           </div>
         </div>
         <div class="row">

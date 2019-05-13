@@ -1,29 +1,35 @@
 var TriviaQuestions = [{
-	question: "This supercomputer was built by hyper-intelligent beings who exist in our dimension as ordinary white mice."
-	choices: ["Deep Thought" , "Profound Notion" , "The Big Brain" ,  "This machine was not named"]
-	validAnswer: 0
+		question: "This supercomputer was built by hyper-intelligent beings who exist in our dimension as ordinary white mice.",
+		choices: ["Deep Thought" , "Profound Notion" , "The Big Brain" ,  "This machine was not named"],
+		validAnswer: 0,
 	},
----
-
-This military system from the movie WarGames was inadvertantly accessed by 80's youth and hacker who was trying to impress a girl.
-
-0 Colossus
-1 The Central Computer
-2 WOPR
-3 Mark V
-
-answer: 2
-
----
-
-This famous computer on a Space Odyssey can't do that. But he's sorry about it.
-
-0 SAL 9000
-1 T.E.N.C.H. 889B
-2 HAL 9000
-3 MU-TH-UR 6000
-
-answer: 2
-
----
-
+	{
+		question: "This military system from the movie WarGames was inadvertantly accessed by 80's youth and hacker who was trying to impress a girl.",
+		choices: ["Colossus" , "The Central Computer" , "WOPR" , "Mark V"],
+		validAnswer: 2,
+	},
+	{
+		question: "This famous computer on a Space Odyssey can't do that. But he's sorry about it.",
+		choices: ["SAL 9000" , "T.E.N.C.H. 889B" , "HAL 9000" , "MU-TH-UR 6000"],
+		validAnswer: 2,
+	},
+	{
+		question: "In the movie Alien, this computer finally reveals the true purpose behind the Nostromo's mission",
+		choices: ["UNCLE" , "Mother" , "Computo" , "Guardian"],
+		validAnswer: 1,
+	},
+	{
+		question: "After this robot celebrity's first appearence in Forbidden Planet, he susequently guest-starred in several American television shows including The Twilight Zone, The Man from U.N.C.L.E. and Columbo.",
+		choices: ["Mr. Robot" , "Robot B-9" , "Robby the Robot" , "Mr. Roboto"],
+		validAnswer: 2,
+	},
+	{
+		question: "The Maschinenmensch of Fritz Lang's Metropolis also shared this name with her human doppleganger.",
+		choices: ["Brenda" , "Eve" , "Viki" , "Maria"],
+		validAnswer: 3,
+	},
+	{
+		question: "This alien robot came to help save us from ourselves in the classic movie The Day the Earth Stood Still.",
+		choices: ["Klaatu" , "The Robot" , "Gort" , "Brainiac"],
+		validAnswer: 2,
+	},
