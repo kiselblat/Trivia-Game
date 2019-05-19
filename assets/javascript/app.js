@@ -100,6 +100,7 @@ var stopTheClock = function() {
 
 var nextQuestion = function () {
   betweenQ = false;
+  $('#start-button').hide();
   $('#status-pane').text("Time Remaining:");
   $('#question-pane').empty();
   $('#picture-pane').empty();
@@ -164,6 +165,9 @@ var revealAnswers = function() {
 
 var gameOver = function() {
   console.log("game over");
+  $('#start-button')
+    .attr('value' , 'New Game')
+    .show();
   $('#status-pane').text("Complete! - Press Go! to try again");
   $('#countdown').text("You scored " + correct + " out of " + quizLength);
 };
@@ -174,7 +178,8 @@ var newgame = function() {
   correct = 0;
   pickedQuestions = [];
   console.log(quizzing , pickedQuestions);
-  $('#status-pane').text("Press Go! to begin quiz")
+  $('#status-pane').text("Press Go! to begin quiz");
+  $('#start-button').attr('value' , 'Go!');
 }
 
 $(document).ready(function() {
