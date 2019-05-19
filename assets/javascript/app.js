@@ -50,13 +50,13 @@ var query = 0;
 var queryAnswer = 0;
 var correct = 0;
 var incorrect = 0;
+var unanswered = 0;
 var quizzing = true;
 var betweenQ = true;
 
 var pickQuestion = function() {
   if (pickedQuestions.length >= quizLength) {
     //game over
-    gameOver();
     return false;
   } else {
     do {
@@ -90,6 +90,7 @@ var outtaTime = function() {
   console.log("time elapsed");
   revealAnswers();
   betweenQ = true;
+  unanswered++;
   setTimeout(nextQuestion , restTime * 1000);
 }
 
@@ -107,8 +108,8 @@ var nextQuestion = function () {
   $('#choices-pane').empty();
   query = pickQuestion();
   if (query === false) {
-    quizzing = false;
-    console.log(quizzing)
+    // game over
+    gameOver();
     return;
   }
   queryAnswer = query.validAnswer;
@@ -120,14 +121,12 @@ var nextQuestion = function () {
   $('#picture-pane').append(queryPicture);
   // Get choices
   $.each(query.choices , function(choiceIndex , choiceContent) {
-    console.log(choiceContent, choiceIndex);
     var choice = $('<li type="A"></li>');
     choice.text(choiceContent);
     choice.attr('answerNumber' , choiceIndex);
     choice.click(answerQuestion);
     $('#choices-pane').append(choice);
   });
-  console.log("Question: " , query.question);
   console.log("Answer: " , queryAnswer);
   // Start the timer
   timer(answerTime);
@@ -165,21 +164,32 @@ var revealAnswers = function() {
 
 var gameOver = function() {
   console.log("game over");
+  quizzing = false;
   $('#start-button')
-    .attr('value' , 'New Game')
+    .text("New Game")
     .show();
-  $('#status-pane').text("Complete! - Press Go! to try again");
-  $('#countdown').text("You scored " + correct + " out of " + quizLength);
+  $('#status-pane').text("Complete!");
+  $('#countdown')
+    .append($('<p/>')
+      .text(correct + " correct"))
+    .append($('<p/>')
+      .text(incorrect + " incorrect"))
+    .append($('<p/>')
+      .text(unanswered + " unanswered"));
+  return;
 };
 
 var newgame = function() {
   console.log("new game");
   quizzing = true;
   correct = 0;
+  incorrect = 0;
+  unanswered = 0;
   pickedQuestions = [];
   console.log(quizzing , pickedQuestions);
+  $('#countdown').empty();
   $('#status-pane').text("Press Go! to begin quiz");
-  $('#start-button').attr('value' , 'Go!');
+  $('#start-button').text('Go!');
 }
 
 $(document).ready(function() {
@@ -188,8 +198,9 @@ $(document).ready(function() {
     if (quizzing === false) {
       console.log("click new game");
       newgame();  
+    } else {
+      console.log("click next question")
+      nextQuestion();
     }
-    console.log("click next question")
-    nextQuestion();
   });
 })
